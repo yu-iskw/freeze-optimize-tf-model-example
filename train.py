@@ -284,6 +284,8 @@ def main(_):
     # Run all the initializers to prepare the trainable parameters.
     tf.global_variables_initializer().run()
     print('Initialized!')
+    # Make a saver
+    saver = tf.train.Saver()
     # Loop through training steps.
     for step in xrange(int(num_epochs * train_size) // BATCH_SIZE):
       # Compute the offset of the current minibatch in the data.
@@ -319,6 +321,10 @@ def main(_):
       print('test_error', test_error)
       assert test_error == 0.0, 'expected 0.0 test_error, got %.2f' % (
           test_error,)
+    # Save checkpoint
+    saved_path = './model/model.ckpt'
+    saver.save(sess, save_path=saved_path)
+    print('Save model in {}'.format(saved_path))
 
 
 if __name__ == '__main__':
