@@ -1,0 +1,16 @@
+name: freeze-optimize-tf-model-example
+channels:
+    - https://conda.anaconda.org/menpo
+    - conda-forge
+dependencies:
+    - python=3.5
+    - protobuf
+    - openblas
+    - numpy
+    - scipy
+    - pandas
+    - Cython
+    - h5py
+    - pip:
+        - jupyter
+        - tensorflow==1.4.1
