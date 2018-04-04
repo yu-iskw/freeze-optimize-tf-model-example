@@ -222,7 +222,10 @@ def main(_):
     # activations such that no rescaling is needed at evaluation time.
     if train:
       hidden = tf.nn.dropout(hidden, 0.5, seed=SEED)
-    return tf.matmul(hidden, fc2_weights) + fc2_biases
+    # Name the logits tensor
+    logits = tf.matmul(hidden, fc2_weights) + fc2_biases
+    tf.identity(logits, name="logits")
+    return logits
 
   # Training computation: logits + cross-entropy loss.
   logits = model(train_data_node, True)
@@ -246,9 +249,7 @@ def main(_):
       0.95,                # Decay rate.
       staircase=True)
   # Use simple momentum for the optimization.
-  optimizer = tf.train.MomentumOptimizer(learning_rate,
-                                         0.9).minimize(loss,
-                                                       global_step=batch)
+  optimizer = tf.train.AdamOptimizer().minimize(loss, global_step=batch)
 
   # Predictions for the current training minibatch.
   train_prediction = tf.nn.softmax(logits)
