@@ -16,6 +16,9 @@ def main(_):
         # Load weights
         saver.restore(sess, checkpoint_path)
 
+        # Print debug
+        [print(n.name) for n in tf.get_default_graph().as_graph_def().node]
+
         # Freeze the graph
         graph = tf.get_default_graph()
         # Convert variables to constants

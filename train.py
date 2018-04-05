@@ -150,7 +150,8 @@ def main(_):
   # training step using the {feed_dict} argument to the Run() call below.
   train_data_node = tf.placeholder(
       data_type(),
-      shape=(BATCH_SIZE, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
+      shape=(BATCH_SIZE, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
+      name="image_input")
   train_labels_node = tf.placeholder(tf.int64, shape=(BATCH_SIZE,))
   eval_data = tf.placeholder(
       data_type(),
