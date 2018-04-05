@@ -3,12 +3,12 @@ FROM tensorflow/tensorflow:1.4.1-devel
 WORKDIR /tensorflow
 
 # build python tools
-RUN bazel build tensorflow/python/tools:freeze_graph
-RUN bazel build tensorflow/python/tools:inspect_checkpoint
-RUN bazel build tensorflow/python/tools:optimize_for_inference
-RUN bazel build tensorflow/python/tools:saved_model_cli
-RUN bazel build tensorflow/python/tools:saved_model_utils
-RUN bazel build tensorflow/python/tools:strip_unused
+RUN bazel build tensorflow/python/tools:freeze_graph \
+  && bazel build tensorflow/python/tools:inspect_checkpoint \
+  && bazel build tensorflow/python/tools:optimize_for_inference \
+  && bazel build tensorflow/python/tools:saved_model_cli \
+  && bazel build tensorflow/python/tools:saved_model_utils \
+  && bazel build tensorflow/python/tools:strip_unused
 
 # build tools
 RUN bazel build tensorflow/tools/graph_transforms:transform_graph \

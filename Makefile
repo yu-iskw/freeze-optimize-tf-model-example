@@ -1,5 +1,7 @@
 NAME := freeze-optimize-tf-model-example
 
+TAG := 1.4.1-devel
+
 DOCKER_REPO := yuiskw/tensorflow-tools
 
 create-conda:
