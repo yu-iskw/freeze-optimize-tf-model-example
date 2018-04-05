@@ -43,7 +43,7 @@ NUM_LABELS = 10
 VALIDATION_SIZE = 5000  # Size of the validation set.
 SEED = 66478  # Set to None for random seed.
 BATCH_SIZE = 64
-NUM_EPOCHS = 10
+NUM_EPOCHS = 1
 EVAL_BATCH_SIZE = 64
 EVAL_FREQUENCY = 100  # Number of steps between evaluations.
 
@@ -231,6 +231,7 @@ def main(_):
   logits = model(train_data_node, True)
   loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(
       labels=train_labels_node, logits=logits))
+  tf.summary.scalar('loss', loss)
 
   # L2 regularization for the fully connected parameters.
   regularizers = (tf.nn.l2_loss(fc1_weights) + tf.nn.l2_loss(fc1_biases) +
@@ -315,6 +316,9 @@ def main(_):
         print('Validation error: %.1f%%' % error_rate(
             eval_in_batches(validation_data, sess), validation_labels))
         sys.stdout.flush()
+        # TensorBoard
+        merged = tf.summary.merge_all()
+        writer = tf.summary.FileWriter('./logs', sess.graph)
     # Finally print the result!
     test_error = error_rate(eval_in_batches(test_data, sess), test_labels)
     print('Test error: %.1f%%' % test_error)
@@ -322,10 +326,13 @@ def main(_):
       print('test_error', test_error)
       assert test_error == 0.0, 'expected 0.0 test_error, got %.2f' % (
           test_error,)
-    # Save checkpoint
+    # Save graph and checkpoint
     saved_path = './model/model.ckpt'
+    graph_path = './model/graph.pb'
     saver.save(sess, save_path=saved_path)
-    print('Save model in {}'.format(saved_path))
+    tf.train.write_graph(sess.graph_def, '.', graph_path, as_text=False)
+    print('Save checkpoint in {}'.format(saved_path))
+    print('Save graph in {}'.format(graph_path))
 
 
 if __name__ == '__main__':

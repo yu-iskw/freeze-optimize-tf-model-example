@@ -14,3 +14,4 @@ dependencies:
     - pip:
         - jupyter
         - tensorflow==1.4.1
+        - html5lib
